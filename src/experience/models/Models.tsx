@@ -3,8 +3,6 @@ import { Center, Environment, OrbitControls, useGLTF } from "@react-three/drei";
 export const Models = () => {
   const { scene } = useGLTF("/models/train.glb");
 
-  
-
   return (
     <>
       <Center>
@@ -17,3 +15,5 @@ export const Models = () => {
     </>
   );
 };
+
+useGLTF.preload("/models/train.glb");

@@ -1,50 +1,71 @@
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { Experience } from "./experience/Experience";
+import { useEffect, useRef, useState } from "react";
+import { ScrollTrigger } from "gsap/all";
+
+gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(ScrollTrigger);
 
 function App() {
+  const container = useRef<HTMLDivElement>(null);
+  const [experienceState, setExperienceState] = useState({ value: 0 });
+
+  useEffect(() => {
+    console.log("Fase:", experienceState.value);
+  }, [experienceState]);
+
+  useGSAP(
+    () => {
+      // Crear un trigger por cada sección
+      for (let i = 0; i < 5; i++) {
+        ScrollTrigger.create({
+          trigger: `.section-${i}`,
+          start: "top center",
+          end: "bottom center",
+          markers: false,
+          onEnter: () => setExperienceState({ value: i }),
+          onEnterBack: () => setExperienceState({ value: i }),
+        });
+      }
+    },
+    { scope: container }
+  );
 
   return (
-    <div className="min-h-screen bg-neutral-50 text-neutral-950">
-      {/* Header */}
-      <header className="p-4 border-b">
+    <div ref={container} className="relative min-h-[500vh] text-neutral-950">
+      {/* Fondo 3D fijo */}
+      <div className="fixed inset-0 -z-10 w-screen h-screen">
+        <Experience experienceState={experienceState} />
+      </div>
+
+      {/* Contenido Scrollable */}
+      <header className="p-4 border-b bg-white bg-opacity-70 backdrop-blur-sm sticky top-0 z-10">
         <div className="flex justify-between items-center">
-          <h1 
-            className="text-2xl font-bold cursor-pointer"
-          >
-            Trenes del Futuro
+          <h1 className="text-2xl font-bold cursor-pointer">
+            Modelo + Scroll
           </h1>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="p-4">
-        {/* 3D Experience Section - Ocupa la mayor parte de la pantalla */}
-        <div className="h-[80vh] border rounded-lg overflow-hidden">
-          <Experience />
-        </div>
-
-        {/* Information Section - Siempre visible */}
-        <div className="mt-6 p-4 space-y-4">
-          <h2 className="text-xl font-bold">
-            El Futuro del Transporte Ferroviario
-          </h2>
-
-          <p>
-            Los trenes de última generación están revolucionando el transporte. 
-            Con velocidades que superan los 600 km/h, combinan eficiencia energética, 
-            confort y tecnología de punta.
-          </p>
-
-          <ul className="list-disc pl-5 space-y-2">
-            <li>Suspensión magnética para un viaje suave</li>
-            <li>Autonomía energética mediante paneles solares</li>
-            <li>Sistemas de seguridad IA que previenen accidentes</li>
-            <li>Interiores modulares adaptables</li>
-          </ul>
-        </div>
+      <main className="space-y-[20vh] px-6 py-12 bg-neutral-50/30">
+        {[...Array(5)].map((_, i) => (
+          <section
+            key={i}
+            className={`section-${i} max-w-3xl mx-auto min-h-[80vh]`}
+          >
+            <h2 className="text-3xl font-bold mb-4">Sección {i + 1}</h2>
+            <p className="text-lg text-neutral-700">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+              tristique, justo at imperdiet tincidunt, sapien justo placerat
+              quam, in tempus metus justo in leo. Vestibulum sit amet finibus
+              neque.
+            </p>
+          </section>
+        ))}
       </main>
 
-      {/* Footer */}
-      <footer className="p-4 text-center text-sm border-t">
+      <footer className="p-4 text-center text-sm border-t bg-white bg-opacity-70 backdrop-blur-sm">
         © {new Date().getFullYear()} Innovaciones Ferroviarias
       </footer>
     </div>

@@ -3,3 +3,8 @@
 .r3f {
     touch-action: none;
 }
+
+body {
+    display: flex;
+    justify-content: center;
+}
