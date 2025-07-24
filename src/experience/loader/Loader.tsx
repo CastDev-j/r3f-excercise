@@ -18,13 +18,6 @@ export const Loader = () => {
         duration: 0.4,
         ease: "power2.out",
       });
-
-      gsap.to(textRef.current, {
-        innerText: Math.floor(progress),
-        duration: 0.4,
-        ease: "none",
-        roundProps: "innerText",
-      });
     },
     { dependencies: [progress], scope: container }
   );
