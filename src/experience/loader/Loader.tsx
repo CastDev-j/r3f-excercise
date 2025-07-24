@@ -6,10 +6,11 @@ import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(useGSAP);
 
 export const Loader = () => {
-  const { progress } = useProgress();
+  const { progress, active, item, loaded, total, errors } = useProgress();
   const container = useRef(null);
   const barRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -18,8 +19,21 @@ export const Loader = () => {
         duration: 0.4,
         ease: "power2.out",
       });
+
+      gsap.to(textRef.current, {
+        textContent: `${Math.round(progress)}%`,
+        duration: 0.4,
+        snap: { textContent: 1 },
+      });
+
+      if (detailsRef.current) {
+        gsap.to(detailsRef.current, {
+          opacity: active ? 1 : 0,
+          duration: 0.3,
+        });
+      }
     },
-    { dependencies: [progress], scope: container }
+    { dependencies: [progress, active], scope: container }
   );
 
   return (
@@ -27,7 +41,7 @@ export const Loader = () => {
       <div ref={container} className="w-64 flex flex-col items-center">
         {/* Texto "Cargando" */}
         <div className="mb-3 text-sm font-semibold animate-pulse select-none">
-          Cargando...
+          {active ? "Cargando..." : "Listo!"}
         </div>
 
         {/* Barra con contorno blanco interno */}
@@ -42,8 +56,29 @@ export const Loader = () => {
         </div>
 
         {/* Porcentaje */}
-        <div ref={textRef} className="mt-2 text-white text-xs font-medium">
+        <div ref={textRef} className="mt-2 text-black text-xs font-medium">
           0%
+        </div>
+
+        {/* Detalles adicionales */}
+        <div
+          ref={detailsRef}
+          className="mt-4 text-center text-xs text-neutral-700 space-y-1 opacity-0 w-full"
+        >
+          {item && (
+            <p className="truncate">
+              Archivo: <span className="font-medium">{item}</span>
+            </p>
+          )}
+          <p>
+            Cargados: <span className="font-medium">{loaded}</span> de{" "}
+            <span className="font-medium">{total}</span>
+          </p>
+          {errors.length > 0 && (
+            <p className="text-red-500">
+              Errores: <span className="font-medium">{errors}</span>
+            </p>
+          )}
         </div>
       </div>
     </Html>
