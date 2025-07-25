@@ -1,10 +1,11 @@
 import { Canvas, useThree } from "@react-three/fiber";
 import { Leva } from "leva";
 import { Models } from "./models/Models";
-import { useRef } from "react";
+import { Suspense, useRef } from "react";
 import { Perf } from "r3f-perf";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { Loader } from "@react-three/drei";
 
 interface ExperienceProps {
   experienceState: { value: number };
@@ -61,14 +62,17 @@ export const Experience = ({ experienceState }: ExperienceProps) => {
           fov: 75,
           near: 0.1,
           far: 200,
-          position: [10, 10, 10], // Posición inicial
+          position: [2.5, 4, -6], // Posición inicial
         }}
         className="r3f"
       >
+        <Suspense fallback={ null}>
           <Models />
+        </Suspense>
         <CameraAnimator phase={experienceState.value} />
         <Perf minimal position="bottom-left hidden" />
       </Canvas>
+      <Loader/>
     </>
   );
 };

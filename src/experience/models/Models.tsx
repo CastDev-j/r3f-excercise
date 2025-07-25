@@ -1,4 +1,4 @@
-import { Center, Environment, OrbitControls, useGLTF } from "@react-three/drei";
+import { Center, OrbitControls, useGLTF } from "@react-three/drei";
 
 export const Models = () => {
   const { scene } = useGLTF("/models/train.glb");
@@ -9,11 +9,9 @@ export const Models = () => {
         <primitive object={scene} />
       </Center>
 
-      <Environment preset="city" environmentIntensity={1.5} />
+      <ambientLight intensity={3} />
 
       <OrbitControls makeDefault />
     </>
   );
 };
-
-useGLTF.preload("/models/train.glb");
