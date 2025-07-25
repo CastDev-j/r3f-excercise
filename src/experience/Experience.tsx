@@ -5,7 +5,7 @@ import { Suspense, useRef } from "react";
 import { Perf } from "r3f-perf";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { Loader } from "@react-three/drei";
+// import { Loader } from "@react-three/drei";
 
 interface ExperienceProps {
   experienceState: { value: number };
@@ -72,7 +72,6 @@ export const Experience = ({ experienceState }: ExperienceProps) => {
         <CameraAnimator phase={experienceState.value} />
         <Perf minimal position="bottom-left hidden" />
       </Canvas>
-      <Loader/>
     </>
   );
 };
